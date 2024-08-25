@@ -127,6 +127,7 @@ const (
 	ACLBindingRulesDeleteRequestType             MessageType = 58
 	NodePoolUpsertRequestType                    MessageType = 59
 	NodePoolDeleteRequestType                    MessageType = 60
+	JobVersionTagRequestType                     MessageType = 61
 
 	// Namespace types were moved from enterprise and therefore start at 64
 	NamespaceUpsertRequestType MessageType = 64
@@ -4525,6 +4526,26 @@ type JobTaggedVersion struct {
 	Name        string
 	Description string
 	TaggedTime  int64
+}
+
+// TODO: Probably don't need these json: marshalers.
+type JobTagRequest struct {
+	// JobID       string // TODO: JobID and Version dont really belong here I think. They should be URL params.
+	// Version     string
+	// Name        string
+	// Description string
+	JobID   string
+	Version uint64
+	Tag     *JobTaggedVersion
+	QueryOptions
+	WriteRequest
+}
+
+type JobTagResponse struct {
+	Name        string
+	Description string
+	TaggedTime  int64
+	QueryMeta
 }
 
 func (tv *JobTaggedVersion) Copy() *JobTaggedVersion {

@@ -385,6 +385,9 @@ func (n *nomadFSM) Apply(log *raft.Log) interface{} {
 		return n.applyACLBindingRulesUpsert(buf[1:], log.Index)
 	case structs.ACLBindingRulesDeleteRequestType:
 		return n.applyACLBindingRulesDelete(buf[1:], log.Index)
+	case structs.JobVersionTagRequestType:
+		return n.applyJobVersionTag(buf[1:], log.Index)
+		// return n.applyUpsertJob(msgType, buf[1:], log.Index) // TODO: Does this make sense for version tagging, or should I make a new fsm method?
 	}
 
 	// Check enterprise only message types.
@@ -1172,6 +1175,23 @@ func (n *nomadFSM) applyDeploymentDelete(buf []byte, index uint64) interface{} {
 
 	if err := n.state.DeleteDeployment(index, req.Deployments); err != nil {
 		n.logger.Error("DeleteDeployment failed", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+// Version Tag shenanigans
+// TODO: consider a "Put job in state, no side-effects" method instead of this
+func (n *nomadFSM) applyJobVersionTag(buf []byte, index uint64) interface{} {
+	defer metrics.MeasureSince([]string{"nomad", "fsm", "apply_job_version_tag"}, time.Now())
+	var req structs.JobTagRequest
+	if err := structs.Decode(buf, &req); err != nil {
+		panic(fmt.Errorf("failed to decode request: %v", err))
+	}
+
+	if err := n.state.UpdateJobVersionTag(index, req.QueryOptions.Namespace, req.JobID, req.Version, req.Tag); err != nil {
+		n.logger.Error("UpdateJobVersionTag failed", "error", err)
 		return err
 	}
 
