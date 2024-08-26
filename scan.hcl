@@ -48,7 +48,7 @@ repository {
         "ui/tests/*",
         "internal/testing/*",
         "testutil/*",
-        "website/content//*",
+        "website/content/*",
       ]
     }
   }
