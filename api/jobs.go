@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"maps"
 	"net/url"
 	"sort"
@@ -1645,11 +1644,6 @@ type JobStatusesRequest struct {
 	IncludeChildren bool
 }
 
-// #region TaggedVersions
-
-// Function TagVersion to apply a JobTaggedVersion to a Job Version (which itself is a job)
-// by POSTing to the /v1/job/:job_id/versions/:version/tag endpoint.
-
 type TagVersionRequest struct {
 	JobID   string
 	Version string
@@ -1667,8 +1661,5 @@ func (j *Jobs) TagVersion(jobID string, version string, name string, description
 		},
 	}
 
-	log.Printf("TagVersionRequest: %+v ", tagRequest)
 	return j.client.put("/v1/job/"+url.PathEscape(jobID)+"/versions/"+version+"/tag", tagRequest, nil, q)
 }
-
-// #endregion TaggedVersions
