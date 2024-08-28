@@ -66,6 +66,7 @@ var msgTypeNames = map[structs.MessageType]string{
 	structs.NodePoolUpsertRequestType:                    "NodePoolUpsertRequestType",
 	structs.NodePoolDeleteRequestType:                    "NodePoolDeleteRequestType",
 	structs.JobVersionTagRequestType:                     "JobVersionTagRequestType",
+	structs.JobVersionTagUnsetRequestType:                "JobVersionTagUnsetRequestType",
 	structs.NamespaceUpsertRequestType:                   "NamespaceUpsertRequestType",
 	structs.NamespaceDeleteRequestType:                   "NamespaceDeleteRequestType",
 }

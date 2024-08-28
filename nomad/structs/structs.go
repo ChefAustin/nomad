@@ -128,6 +128,7 @@ const (
 	NodePoolUpsertRequestType                    MessageType = 59
 	NodePoolDeleteRequestType                    MessageType = 60
 	JobVersionTagRequestType                     MessageType = 61
+	JobVersionTagUnsetRequestType                MessageType = 62
 
 	// Namespace types were moved from enterprise and therefore start at 64
 	NamespaceUpsertRequestType MessageType = 64
@@ -4529,11 +4530,21 @@ type JobTaggedVersion struct {
 }
 
 type JobTagRequest struct {
-	JobID   string
-	Version uint64
-	Tag     *JobTaggedVersion
+	JobID string
+	Name  string
+	// Version     string
+	Description string
+	Version     *uint64
+	// Tag     *JobTaggedVersion
 	QueryOptions
 	WriteRequest
+}
+
+type JobUnsetTagRequest struct {
+	JobID string
+	Name  string
+	QueryOptions
+	WriteRequest // TODO: do deletes get a WriteRequest?
 }
 
 type JobTagResponse struct {
